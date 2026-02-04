@@ -6,12 +6,21 @@ import { restaurantInfo } from "@/data/menuData";
 interface HeaderProps {
   title?: string;
   showBack?: boolean;
+  backTo?: string;
 }
 
-const Header = ({ title, showBack = false }: HeaderProps) => {
+const Header = ({ title, showBack = false, backTo }: HeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isHome = location.pathname === "/menu" || location.pathname === "/";
+
+  const handleBack = () => {
+    if (backTo) {
+      navigate(backTo);
+    } else {
+      navigate(-1);
+    }
+  };
 
   return (
     <motion.header
@@ -24,7 +33,7 @@ const Header = ({ title, showBack = false }: HeaderProps) => {
           <div className="flex items-center gap-3">
             {showBack && (
               <button
-                onClick={() => navigate(-1)}
+                onClick={handleBack}
                 className="w-10 h-10 flex items-center justify-center rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
               >
                 <ArrowLeft className="w-5 h-5" />

@@ -6,7 +6,7 @@ import { menuData } from "@/data/menuData";
 const Menu = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Header title="Menu" showBack />
+      <Header title="Menu" showBack backTo="/" />
       
       <main className="container max-w-lg mx-auto px-4 py-6">
         <motion.div
