@@ -2,11 +2,16 @@ import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import SubCategoryCard from "@/components/SubCategoryCard";
-import { menuData } from "@/data/menuData";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api";
 
 const CategoryPage = () => {
   const { categoryId } = useParams();
-  const category = menuData.find((c) => c.id === categoryId);
+  const { data: category } = useQuery({
+    queryKey: ["category", categoryId],
+    queryFn: () => api.getCategory(String(categoryId)),
+    enabled: !!categoryId,
+  });
 
   if (!category) {
     return (
@@ -23,7 +28,7 @@ const CategoryPage = () => {
       {/* Hero Banner */}
       <div className="relative h-48 overflow-hidden">
         <img
-          src={category.image}
+          src={category.image_url || category.image}
           alt={category.name}
           className="w-full h-full object-cover"
         />
@@ -33,7 +38,6 @@ const CategoryPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <span className="text-4xl mb-2 block">{category.icon}</span>
             <h1 className="font-display text-3xl font-bold text-foreground">
               {category.name}
             </h1>
@@ -54,7 +58,7 @@ const CategoryPage = () => {
         </motion.p>
 
         <div className="space-y-4">
-          {category.subCategories.map((subCategory, index) => (
+          {category.subCategories.map((subCategory: any, index: number) => (
             <SubCategoryCard
               key={subCategory.id}
               subCategory={subCategory}

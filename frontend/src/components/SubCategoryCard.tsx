@@ -1,10 +1,9 @@
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { SubCategory } from "@/data/menuData";
 
 interface SubCategoryCardProps {
-  subCategory: SubCategory;
+  subCategory: any;
   categoryId: string;
   index: number;
 }
@@ -21,7 +20,7 @@ const SubCategoryCard = ({ subCategory, categoryId, index }: SubCategoryCardProp
           <div className="flex gap-4">
             <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-xl">
               <img
-                src={subCategory.image}
+                src={subCategory.image_url || subCategory.image}
                 alt={subCategory.name}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -38,7 +37,7 @@ const SubCategoryCard = ({ subCategory, categoryId, index }: SubCategoryCardProp
               
               <div className="flex items-center justify-between">
                 <span className="text-xs text-muted-foreground">
-                  {subCategory.items.length} varieties
+                  {(subCategory.itemCount ?? subCategory.items?.length ?? 0)} varieties
                 </span>
                 <div className="flex items-center gap-1 text-primary font-medium text-sm group-hover:gap-2 transition-all">
                   View All

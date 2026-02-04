@@ -78,6 +78,15 @@ const Index = () => {
             <UtensilsCrossed className="w-5 h-5" />
             Browse Menu
           </Link>
+          
+          <div className="mt-8">
+            <Link 
+              to="/admin/login"
+              className="text-xs text-muted-foreground hover:text-primary underline"
+            >
+              Admin Sign In
+            </Link>
+          </div>
         </motion.div>
       </div>
     </div>

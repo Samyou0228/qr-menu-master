@@ -1,10 +1,9 @@
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Category } from "@/data/menuData";
 
 interface CategoryCardProps {
-  category: Category;
+  category: any;
   index: number;
 }
 
@@ -19,7 +18,7 @@ const CategoryCard = ({ category, index }: CategoryCardProps) => {
         <div className="menu-card group relative overflow-hidden cursor-pointer">
           <div className="aspect-[4/3] overflow-hidden rounded-xl mb-4">
             <img
-              src={category.image}
+              src={category.image_url || category.image}
               alt={category.name}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
@@ -28,7 +27,6 @@ const CategoryCard = ({ category, index }: CategoryCardProps) => {
           
           <div className="relative">
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-2xl">{category.icon}</span>
               <h3 className="font-display text-xl font-semibold text-foreground">
                 {category.name}
               </h3>
@@ -40,7 +38,7 @@ const CategoryCard = ({ category, index }: CategoryCardProps) => {
             
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">
-                {category.subCategories.length} items
+                {category.itemCount ?? 0} items
               </span>
               <div className="flex items-center gap-1 text-primary font-medium text-sm group-hover:gap-2 transition-all">
                 Explore

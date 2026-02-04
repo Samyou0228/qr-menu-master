@@ -1,11 +1,7 @@
 import { motion } from "framer-motion";
 import { Flame, Star, Leaf } from "lucide-react";
-import { MenuItem } from "@/data/menuData";
 
-interface MenuItemCardProps {
-  item: MenuItem;
-  index: number;
-}
+interface MenuItemCardProps { item: any; index: number; }
 
 const MenuItemCard = ({ item, index }: MenuItemCardProps) => {
   return (
@@ -18,11 +14,11 @@ const MenuItemCard = ({ item, index }: MenuItemCardProps) => {
       <div className="flex gap-4">
         <div className="relative w-28 h-28 flex-shrink-0 overflow-hidden rounded-xl">
           <img
-            src={item.image}
+            src={item.image_url || item.image}
             alt={item.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
-          {item.isPopular && (
+          {(item.isPopular ?? item.is_popular) && (
             <div className="absolute top-1 left-1 bg-warm-amber text-primary-foreground text-xs px-2 py-0.5 rounded-full flex items-center gap-1">
               <Star className="w-3 h-3 fill-current" />
               Popular
@@ -37,7 +33,7 @@ const MenuItemCard = ({ item, index }: MenuItemCardProps) => {
                 {item.name}
               </h3>
               <div className="flex items-center gap-1 flex-shrink-0">
-                {item.isVeg ? (
+                {(item.isVeg ?? item.is_veg) ? (
                   <div className="w-5 h-5 border-2 border-success rounded flex items-center justify-center">
                     <div className="w-2 h-2 bg-success rounded-full" />
                   </div>
@@ -62,7 +58,7 @@ const MenuItemCard = ({ item, index }: MenuItemCardProps) => {
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="price-tag">₹{item.price}</span>
+            <span className="price-tag">₹{item.price ?? item.amount}</span>
             <button className="gradient-warm text-primary-foreground px-4 py-1.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity">
               Add
             </button>

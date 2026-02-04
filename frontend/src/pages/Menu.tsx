@@ -1,9 +1,14 @@
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import CategoryCard from "@/components/CategoryCard";
-import { menuData } from "@/data/menuData";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api";
 
 const Menu = () => {
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: api.listCategories,
+  });
   return (
     <div className="min-h-screen bg-background">
       <Header title="Menu" showBack backTo="/" />
@@ -23,7 +28,7 @@ const Menu = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {menuData.map((category, index) => (
+          {categories.map((category: any, index: number) => (
             <CategoryCard key={category.id} category={category} index={index} />
           ))}
         </div>
