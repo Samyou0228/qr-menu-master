@@ -18,7 +18,7 @@ const CategoryPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header title={category.name} showBack />
+      <Header title={category.name} showBack backTo="/menu" />
 
       {/* Hero Banner */}
       <div className="relative h-48 overflow-hidden">

@@ -19,7 +19,7 @@ const SubCategoryPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header title={subCategory.name} showBack />
+      <Header title={subCategory.name} showBack backTo={`/menu/${categoryId}`} />
 
       {/* Hero Banner */}
       <div className="relative h-40 overflow-hidden">
