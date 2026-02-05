@@ -11,7 +11,7 @@ import { connectDB, seedAdminUser } from "./db.js";
 dotenv.config();
 
 const app = express();
-const PORT = 8081;
+const PORT = 8080;
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
 app.use(cors());

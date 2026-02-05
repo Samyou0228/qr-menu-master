@@ -10,7 +10,7 @@ const Index = () => {
   // instead of window.location.origin (which would be 'localhost' on the phone).
   const isDev = import.meta.env.DEV;
   const menuUrl = isDev 
-    ? "http://192.168.1.5:8080/menu" // Your local IP
+    ? "http://192.168.1.5:5173/menu" // Your local IP
     : window.location.origin + "/menu";
 
   return (

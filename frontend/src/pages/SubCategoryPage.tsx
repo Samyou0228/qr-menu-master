@@ -12,11 +12,8 @@ const SubCategoryPage = () => {
     queryFn: () => api.getCategory(String(categoryId)),
     enabled: !!categoryId,
   });
-  const { data: subCategory } = useQuery({
-    queryKey: ["subCategory", subCategoryId],
-    queryFn: () => api.getSubCategory(String(subCategoryId)),
-    enabled: !!subCategoryId,
-  });
+  
+  const subCategory = category?.subCategories?.find((s: any) => s._id === subCategoryId);
 
   if (!category || !subCategory) {
     return (
