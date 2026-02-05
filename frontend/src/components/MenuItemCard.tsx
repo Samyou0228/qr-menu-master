@@ -14,7 +14,7 @@ const MenuItemCard = ({ item, index }: MenuItemCardProps) => {
       <div className="flex gap-4">
         <div className="relative w-28 h-28 flex-shrink-0 overflow-hidden rounded-xl">
           <img
-            src={item.image_url || item.image}
+            src={item.imageUrl || item.image_url || item.image}
             alt={item.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />

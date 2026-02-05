@@ -18,7 +18,7 @@ const CategoryCard = ({ category, index }: CategoryCardProps) => {
         <div className="menu-card group relative overflow-hidden cursor-pointer">
           <div className="aspect-[4/3] overflow-hidden rounded-xl mb-4">
             <img
-              src={category.image_url || category.image}
+              src={category.imageUrl || category.image_url || category.image}
               alt={category.name}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
@@ -30,6 +30,17 @@ const CategoryCard = ({ category, index }: CategoryCardProps) => {
               <h3 className="font-display text-xl font-semibold text-foreground">
                 {category.name}
               </h3>
+              <div className="flex items-center gap-1 flex-shrink-0">
+                {(category.isVeg ?? true) ? (
+                  <div className="w-4 h-4 border-2 border-green-600 rounded flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 bg-green-600 rounded-full" />
+                  </div>
+                ) : (
+                  <div className="w-4 h-4 border-2 border-red-600 rounded flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 bg-red-600 rounded-full" />
+                  </div>
+                )}
+              </div>
             </div>
             
             <p className="text-muted-foreground text-sm mb-3 line-clamp-2">

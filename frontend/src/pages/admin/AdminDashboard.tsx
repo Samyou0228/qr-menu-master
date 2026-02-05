@@ -183,6 +183,7 @@ const AdminDashboard = () => {
               const formData = new FormData();
               formData.append("name", (form.elements.namedItem("name") as HTMLInputElement).value);
               formData.append("description", (form.elements.namedItem("description") as HTMLInputElement).value);
+              formData.append("isVeg", (form.elements.namedItem("isVeg") as HTMLSelectElement).value);
               const fileInput = form.elements.namedItem("image") as HTMLInputElement;
               if (fileInput.files && fileInput.files[0]) {
                 formData.append("image", fileInput.files[0]);
@@ -193,6 +194,10 @@ const AdminDashboard = () => {
           >
             <Input name="name" placeholder="Name" required />
             <Input name="description" placeholder="Description" />
+            <select name="isVeg" className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              <option value="true">Veg</option>
+              <option value="false">Non-Veg</option>
+            </select>
             <Input name="image" type="file" accept="image/*" />
             <Button type="submit">Add Category</Button>
           </form>
@@ -262,6 +267,7 @@ const AdminDashboard = () => {
                   const formData = new FormData();
                   formData.append("name", (form.elements.namedItem("name") as HTMLInputElement).value);
                   formData.append("description", (form.elements.namedItem("description") as HTMLInputElement).value);
+                  formData.append("isVeg", (form.elements.namedItem("isVeg") as HTMLSelectElement).value);
                   const fileInput = form.elements.namedItem("image") as HTMLInputElement;
                   if (fileInput.files && fileInput.files[0]) {
                     formData.append("image", fileInput.files[0]);
@@ -272,6 +278,10 @@ const AdminDashboard = () => {
               >
                 <Input name="name" placeholder="Name" required />
                 <Input name="description" placeholder="Description" />
+                <select name="isVeg" className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                  <option value="true">Veg</option>
+                  <option value="false">Non-Veg</option>
+                </select>
                 <Input name="image" type="file" accept="image/*" />
                 <Button type="submit" disabled={createSubCategory.isPending}>
                   {createSubCategory.isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Adding...</> : "Add Subcategory"}
@@ -328,6 +338,7 @@ const AdminDashboard = () => {
                   formData.append("name", (form.elements.namedItem("name") as HTMLInputElement).value);
                   formData.append("description", (form.elements.namedItem("description") as HTMLInputElement).value);
                   formData.append("amount", (form.elements.namedItem("amount") as HTMLInputElement).value);
+                  formData.append("isVeg", (form.elements.namedItem("isVeg") as HTMLSelectElement).value);
                   const fileInput = form.elements.namedItem("image") as HTMLInputElement;
                   if (fileInput.files && fileInput.files[0]) {
                     formData.append("image", fileInput.files[0]);
@@ -339,6 +350,10 @@ const AdminDashboard = () => {
                 <Input name="name" placeholder="Name" required />
                 <Input name="description" placeholder="Description" />
                 <Input name="amount" placeholder="Amount" required />
+                <select name="isVeg" className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                  <option value="true">Veg</option>
+                  <option value="false">Non-Veg</option>
+                </select>
                 <Input name="image" type="file" accept="image/*" />
                 <Button type="submit">Add Item</Button>
               </form>
@@ -363,6 +378,7 @@ const AdminDashboard = () => {
               const formData = new FormData();
               formData.append("name", (form.elements.namedItem("name") as HTMLInputElement).value);
               formData.append("description", (form.elements.namedItem("description") as HTMLInputElement).value);
+              formData.append("isVeg", (form.elements.namedItem("isVeg") as HTMLSelectElement).value);
               const fileInput = form.elements.namedItem("image") as HTMLInputElement;
               if (fileInput.files && fileInput.files[0]) {
                 formData.append("image", fileInput.files[0]);
@@ -373,6 +389,10 @@ const AdminDashboard = () => {
           >
             <Input name="name" placeholder="Name" defaultValue={editingCategory?.name} required />
             <Input name="description" placeholder="Description" defaultValue={editingCategory?.description} />
+            <select name="isVeg" defaultValue={editingCategory?.isVeg?.toString() ?? "true"} className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              <option value="true">Veg</option>
+              <option value="false">Non-Veg</option>
+            </select>
             <div>
               <label className="text-sm text-muted-foreground">Current Image: {editingCategory?.imageUrl ? "Set" : "None"}</label>
               <Input name="image" type="file" accept="image/*" />
@@ -401,6 +421,7 @@ const AdminDashboard = () => {
               const formData = new FormData();
               formData.append("name", (form.elements.namedItem("name") as HTMLInputElement).value);
               formData.append("description", (form.elements.namedItem("description") as HTMLInputElement).value);
+              formData.append("isVeg", (form.elements.namedItem("isVeg") as HTMLSelectElement).value);
               const fileInput = form.elements.namedItem("image") as HTMLInputElement;
               if (fileInput.files && fileInput.files[0]) {
                 formData.append("image", fileInput.files[0]);
@@ -411,6 +432,10 @@ const AdminDashboard = () => {
           >
             <Input name="name" placeholder="Name" defaultValue={editingSub?.name} required />
             <Input name="description" placeholder="Description" defaultValue={editingSub?.description} />
+            <select name="isVeg" defaultValue={editingSub?.isVeg?.toString() ?? "true"} className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              <option value="true">Veg</option>
+              <option value="false">Non-Veg</option>
+            </select>
             <div>
               <label className="text-sm text-muted-foreground">Current Image: {editingSub?.imageUrl ? "Set" : "None"}</label>
               <Input name="image" type="file" accept="image/*" />
@@ -441,6 +466,7 @@ const AdminDashboard = () => {
               formData.append("name", (form.elements.namedItem("name") as HTMLInputElement).value);
               formData.append("description", (form.elements.namedItem("description") as HTMLInputElement).value);
               formData.append("amount", (form.elements.namedItem("amount") as HTMLInputElement).value);
+              formData.append("isVeg", (form.elements.namedItem("isVeg") as HTMLSelectElement).value);
               const fileInput = form.elements.namedItem("image") as HTMLInputElement;
               if (fileInput.files && fileInput.files[0]) {
                 formData.append("image", fileInput.files[0]);
@@ -452,6 +478,10 @@ const AdminDashboard = () => {
             <Input name="name" placeholder="Name" defaultValue={editingItem?.name} required />
             <Input name="description" placeholder="Description" defaultValue={editingItem?.description} />
             <Input name="amount" placeholder="Amount" defaultValue={editingItem?.amount} required />
+            <select name="isVeg" defaultValue={editingItem?.isVeg?.toString() ?? "true"} className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              <option value="true">Veg</option>
+              <option value="false">Non-Veg</option>
+            </select>
             <div>
               <label className="text-sm text-muted-foreground">Current Image: {editingItem?.imageUrl ? "Set" : "None"}</label>
               <Input name="image" type="file" accept="image/*" />

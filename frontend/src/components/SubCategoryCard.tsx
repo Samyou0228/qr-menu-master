@@ -20,16 +20,29 @@ const SubCategoryCard = ({ subCategory, categoryId, index }: SubCategoryCardProp
           <div className="flex gap-4">
             <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-xl">
               <img
-                src={subCategory.image_url || subCategory.image}
+                src={subCategory.imageUrl || subCategory.image_url || subCategory.image}
                 alt={subCategory.name}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
             </div>
             
             <div className="flex-1 flex flex-col justify-center">
-              <h3 className="font-display text-lg font-semibold text-foreground mb-1">
-                {subCategory.name}
-              </h3>
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="font-display text-lg font-semibold text-foreground">
+                  {subCategory.name}
+                </h3>
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  {(subCategory.isVeg ?? true) ? (
+                    <div className="w-4 h-4 border-2 border-green-600 rounded flex items-center justify-center">
+                      <div className="w-1.5 h-1.5 bg-green-600 rounded-full" />
+                    </div>
+                  ) : (
+                    <div className="w-4 h-4 border-2 border-red-600 rounded flex items-center justify-center">
+                      <div className="w-1.5 h-1.5 bg-red-600 rounded-full" />
+                    </div>
+                  )}
+                </div>
+              </div>
               
               <p className="text-muted-foreground text-sm mb-2 line-clamp-2">
                 {subCategory.description}
