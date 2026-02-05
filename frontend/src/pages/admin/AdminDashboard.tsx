@@ -22,12 +22,12 @@ const AdminDashboard = () => {
   }, [selectedCategory, selectedSubId]);
 
   const createCategory = useMutation({
-    mutationFn: (payload: { name: string; description?: string; imageUrl?: string }) => api.createCategory(payload),
+    mutationFn: (payload: FormData) => api.createCategory(payload),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["categories"] }),
   });
   const createSubCategory = useMutation({
-    mutationFn: (payload: { categoryId: string; name: string; description?: string; imageUrl?: string }) =>
-      api.createSubCategory(payload.categoryId, payload),
+    mutationFn: (payload: { categoryId: string; formData: FormData }) =>
+      api.createSubCategory(payload.categoryId, payload.formData),
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["category", vars.categoryId] });
     },
@@ -36,13 +36,8 @@ const AdminDashboard = () => {
     mutationFn: (payload: {
       categoryId: string;
       subCategoryId: string;
-      name: string;
-      description?: string;
-      amount: number;
-      imageUrl?: string;
-      isVeg?: boolean;
-      isPopular?: boolean;
-    }) => api.createItem(payload.categoryId, payload.subCategoryId, payload),
+      formData: FormData;
+    }) => api.createItem(payload.categoryId, payload.subCategoryId, payload.formData),
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["category", vars.categoryId] });
       qc.invalidateQueries({ queryKey: ["categories"] });
@@ -91,16 +86,20 @@ const AdminDashboard = () => {
             onSubmit={(e) => {
               e.preventDefault();
               const form = e.currentTarget;
-              const name = (form.elements.namedItem("name") as HTMLInputElement).value;
-              const description = (form.elements.namedItem("description") as HTMLInputElement).value;
-              const imageUrl = (form.elements.namedItem("imageUrl") as HTMLInputElement).value;
-              createCategory.mutate({ name, description, imageUrl });
+              const formData = new FormData();
+              formData.append("name", (form.elements.namedItem("name") as HTMLInputElement).value);
+              formData.append("description", (form.elements.namedItem("description") as HTMLInputElement).value);
+              const fileInput = form.elements.namedItem("image") as HTMLInputElement;
+              if (fileInput.files && fileInput.files[0]) {
+                formData.append("image", fileInput.files[0]);
+              }
+              createCategory.mutate(formData);
               form.reset();
             }}
           >
             <Input name="name" placeholder="Name" />
             <Input name="description" placeholder="Description" />
-            <Input name="imageUrl" placeholder="Image URL" />
+            <Input name="image" type="file" accept="image/*" />
             <Button type="submit">Add Category</Button>
           </form>
         </section>
@@ -148,16 +147,20 @@ const AdminDashboard = () => {
                   e.preventDefault();
                   if (!selectedCategoryId) return;
                   const form = e.currentTarget;
-                  const name = (form.elements.namedItem("name") as HTMLInputElement).value;
-                  const description = (form.elements.namedItem("description") as HTMLInputElement).value;
-                  const imageUrl = (form.elements.namedItem("imageUrl") as HTMLInputElement).value;
-                  createSubCategory.mutate({ categoryId: selectedCategoryId, name, description, imageUrl });
+                  const formData = new FormData();
+                  formData.append("name", (form.elements.namedItem("name") as HTMLInputElement).value);
+                  formData.append("description", (form.elements.namedItem("description") as HTMLInputElement).value);
+                  const fileInput = form.elements.namedItem("image") as HTMLInputElement;
+                  if (fileInput.files && fileInput.files[0]) {
+                    formData.append("image", fileInput.files[0]);
+                  }
+                  createSubCategory.mutate({ categoryId: selectedCategoryId, formData });
                   form.reset();
                 }}
               >
                 <Input name="name" placeholder="Name" />
                 <Input name="description" placeholder="Description" />
-                <Input name="imageUrl" placeholder="Image URL" />
+                <Input name="image" type="file" accept="image/*" />
                 <Button type="submit">Add Subcategory</Button>
               </form>
             </>
@@ -190,18 +193,22 @@ const AdminDashboard = () => {
                   e.preventDefault();
                   if (!selectedSubId || !selectedCategoryId) return;
                   const form = e.currentTarget;
-                  const name = (form.elements.namedItem("name") as HTMLInputElement).value;
-                  const description = (form.elements.namedItem("description") as HTMLInputElement).value;
-                  const amount = Number((form.elements.namedItem("amount") as HTMLInputElement).value);
-                  const imageUrl = (form.elements.namedItem("imageUrl") as HTMLInputElement).value;
-                  createItem.mutate({ categoryId: selectedCategoryId, subCategoryId: selectedSubId, name, description, amount, imageUrl });
+                  const formData = new FormData();
+                  formData.append("name", (form.elements.namedItem("name") as HTMLInputElement).value);
+                  formData.append("description", (form.elements.namedItem("description") as HTMLInputElement).value);
+                  formData.append("amount", (form.elements.namedItem("amount") as HTMLInputElement).value);
+                  const fileInput = form.elements.namedItem("image") as HTMLInputElement;
+                  if (fileInput.files && fileInput.files[0]) {
+                    formData.append("image", fileInput.files[0]);
+                  }
+                  createItem.mutate({ categoryId: selectedCategoryId, subCategoryId: selectedSubId, formData });
                   form.reset();
                 }}
               >
                 <Input name="name" placeholder="Name" />
                 <Input name="description" placeholder="Description" />
                 <Input name="amount" placeholder="Amount" />
-                <Input name="imageUrl" placeholder="Image URL" />
+                <Input name="image" type="file" accept="image/*" />
                 <Button type="submit">Add Item</Button>
               </form>
             </>

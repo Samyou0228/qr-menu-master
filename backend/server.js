@@ -7,6 +7,7 @@ import { Category } from "./models/Category.js";
 import { SubCategory } from "./models/SubCategory.js";
 import { Item } from "./models/Item.js";
 import { connectDB, seedAdminUser } from "./db.js";
+import upload from "./upload.js";
 
 dotenv.config();
 
@@ -134,17 +135,25 @@ app.get("/admin/categories", authenticateToken, async (req, res) => {
   } catch (e) { res.status(500).send(e.message); }
 });
 
-app.post("/admin/categories", authenticateToken, async (req, res) => {
+app.post("/admin/categories", authenticateToken, upload.single('image'), async (req, res) => {
   try {
-    const cat = new Category(req.body);
+    const data = req.body;
+    if (req.file) {
+      data.imageUrl = req.file.path;
+    }
+    const cat = new Category(data);
     await cat.save();
     res.json(cat);
   } catch (e) { res.status(500).send(e.message); }
 });
 
-app.put("/admin/categories/:id", authenticateToken, async (req, res) => {
+app.put("/admin/categories/:id", authenticateToken, upload.single('image'), async (req, res) => {
   try {
-    const cat = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const data = req.body;
+    if (req.file) {
+      data.imageUrl = req.file.path;
+    }
+    const cat = await Category.findByIdAndUpdate(req.params.id, data, { new: true });
     res.json(cat);
   } catch (e) { res.status(500).send(e.message); }
 });
@@ -173,9 +182,15 @@ app.get("/admin/subcategories/by-category/:categoryId", authenticateToken, async
   } catch (e) { res.status(500).send(e.message); }
 });
 
-app.post("/admin/subcategories", authenticateToken, async (req, res) => {
+app.post("/admin/subcategories", authenticateToken, upload.single('image'), async (req, res) => {
   try {
-    const sub = new SubCategory(req.body);
+    const data = req.body;
+    if (req.file) {
+      data.imageUrl = req.file.path;
+      // Also support 'image' field if schema uses it
+      data.image = req.file.path;
+    }
+    const sub = new SubCategory(data);
     await sub.save();
     res.json(sub);
   } catch (e) { res.status(500).send(e.message); }
@@ -197,17 +212,25 @@ app.get("/admin/items", authenticateToken, async (req, res) => {
   } catch (e) { res.status(500).send(e.message); }
 });
 
-app.post("/admin/items", authenticateToken, async (req, res) => {
+app.post("/admin/items", authenticateToken, upload.single('image'), async (req, res) => {
   try {
-    const item = new Item(req.body);
+    const data = req.body;
+    if (req.file) {
+      data.imageUrl = req.file.path;
+    }
+    const item = new Item(data);
     await item.save();
     res.json(item);
   } catch (e) { res.status(500).send(e.message); }
 });
 
-app.put("/admin/items/:id", authenticateToken, async (req, res) => {
+app.put("/admin/items/:id", authenticateToken, upload.single('image'), async (req, res) => {
   try {
-    const item = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const data = req.body;
+    if (req.file) {
+      data.imageUrl = req.file.path;
+    }
+    const item = await Item.findByIdAndUpdate(req.params.id, data, { new: true });
     res.json(item);
   } catch (e) { res.status(500).send(e.message); }
 });
