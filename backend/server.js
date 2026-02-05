@@ -196,6 +196,17 @@ app.post("/admin/subcategories", authenticateToken, upload.single('image'), asyn
   } catch (e) { res.status(500).send(e.message); }
 });
 
+app.put("/admin/subcategories/:id", authenticateToken, upload.single('image'), async (req, res) => {
+  try {
+    const data = req.body;
+    if (req.file) {
+      data.imageUrl = req.file.path;
+    }
+    const sub = await SubCategory.findByIdAndUpdate(req.params.id, data, { new: true });
+    res.json(sub);
+  } catch (e) { res.status(500).send(e.message); }
+});
+
 app.delete("/admin/subcategories/:id", authenticateToken, async (req, res) => {
   try {
     await SubCategory.findByIdAndDelete(req.params.id);

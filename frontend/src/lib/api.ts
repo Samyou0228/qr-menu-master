@@ -39,6 +39,17 @@ export const api = {
       body: payload instanceof FormData ? payload : JSON.stringify({ ...payload, categoryId }) 
     });
   },
+  
+  updateCategory: (id: string, payload: FormData | { name: string; description?: string; imageUrl?: string }) =>
+    request(`/admin/categories/${id}`, { method: "PUT", body: payload instanceof FormData ? payload : JSON.stringify(payload) }),
+  
+  deleteCategory: (id: string) => request(`/admin/categories/${id}`, { method: "DELETE" }),
+
+  updateSubCategory: (id: string, payload: FormData | { name: string; description?: string; imageUrl?: string }) =>
+    request(`/admin/subcategories/${id}`, { method: "PUT", body: payload instanceof FormData ? payload : JSON.stringify(payload) }),
+
+  deleteSubCategory: (id: string) => request(`/admin/subcategories/${id}`, { method: "DELETE" }),
+
   // getSubCategory removed/deprecated in favor of tree view or derived state
   createItem: (
     categoryId: string,
@@ -54,4 +65,9 @@ export const api = {
       body: payload instanceof FormData ? payload : JSON.stringify({ ...payload, categoryId, subCategoryId }) 
     });
   },
+
+  updateItem: (id: string, payload: FormData | { name: string; description?: string; amount: number; imageUrl?: string; isVeg?: boolean; isPopular?: boolean }) =>
+    request(`/admin/items/${id}`, { method: "PUT", body: payload instanceof FormData ? payload : JSON.stringify(payload) }),
+
+  deleteItem: (id: string) => request(`/admin/items/${id}`, { method: "DELETE" }),
 };

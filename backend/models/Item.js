@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const itemSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String },
+  imageUrl: { type: String },
   amount: { type: Number, required: true },
   categoryId: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true },
   subCategoryId: { type: mongoose.Schema.Types.ObjectId, ref: "SubCategory" },
