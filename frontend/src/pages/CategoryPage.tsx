@@ -28,7 +28,7 @@ const CategoryPage = () => {
       {/* Hero Banner */}
       <div className="relative h-48 overflow-hidden">
         <img
-          src={category.image_url || category.image}
+          src={category.imageUrl || category.image_url || category.image}
           alt={category.name}
           className="w-full h-full object-cover"
         />

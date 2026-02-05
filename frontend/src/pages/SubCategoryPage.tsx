@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import Header from "@/components/Header";
 import MenuItemCard from "@/components/MenuItemCard";
 import { useQuery } from "@tanstack/react-query";
@@ -23,6 +24,13 @@ const SubCategoryPage = () => {
     );
   }
 
+  const [filter, setFilter] = useState<"veg" | "nonveg" | "all">("all");
+  const filteredItems = (subCategory.items ?? []).filter((item: any) => {
+    if (filter === "all") return true;
+    const isVeg = item.isVeg ?? true;
+    return filter === "veg" ? isVeg : !isVeg;
+  });
+
   return (
     <div className="min-h-screen bg-background">
       <Header title={subCategory.name} showBack backTo={`/menu/${categoryId}`} />
@@ -30,7 +38,7 @@ const SubCategoryPage = () => {
       {/* Hero Banner */}
       <div className="relative h-40 overflow-hidden">
         <img
-          src={subCategory.image_url || subCategory.image}
+          src={subCategory.imageUrl || subCategory.image_url || subCategory.image}
           alt={subCategory.name}
           className="w-full h-full object-cover"
         />
@@ -58,26 +66,32 @@ const SubCategoryPage = () => {
           className="flex items-center justify-between mb-4"
         >
           <span className="text-sm text-muted-foreground">
-            {subCategory.items.length} items
+            {filteredItems.length} items
           </span>
           <div className="flex items-center gap-3 text-xs">
-            <span className="flex items-center gap-1">
-              <span className="w-3 h-3 border border-success rounded-sm flex items-center justify-center">
-                <span className="w-1.5 h-1.5 bg-success rounded-full" />
-              </span>
+            <button
+              className={`px-2 py-0.5 rounded-full ${filter === "veg" ? "bg-success text-success-foreground" : "bg-muted"}`}
+              onClick={() => setFilter("veg")}
+            >
               Veg
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="w-3 h-3 border border-destructive rounded-sm flex items-center justify-center">
-                <span className="w-1.5 h-1.5 bg-destructive rounded-full" />
-              </span>
+            </button>
+            <button
+              className={`px-2 py-0.5 rounded-full ${filter === "nonveg" ? "bg-destructive text-destructive-foreground" : "bg-muted"}`}
+              onClick={() => setFilter("nonveg")}
+            >
               Non-Veg
-            </span>
+            </button>
+            <button
+              className={`px-2 py-0.5 rounded-full ${filter === "all" ? "bg-primary text-primary-foreground" : "bg-muted"}`}
+              onClick={() => setFilter("all")}
+            >
+              All
+            </button>
           </div>
         </motion.div>
 
         <div className="space-y-4">
-          {subCategory.items.map((item: any, index: number) => (
+          {filteredItems.map((item: any, index: number) => (
             <MenuItemCard key={item.id} item={item} index={index} />
           ))}
         </div>
