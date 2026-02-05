@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import SubCategoryCard from "@/components/SubCategoryCard";
+import MenuItemCard from "@/components/MenuItemCard";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 
@@ -60,12 +61,24 @@ const CategoryPage = () => {
         <div className="space-y-4">
           {category.subCategories.map((subCategory: any, index: number) => (
             <SubCategoryCard
-              key={subCategory.id}
+              key={subCategory.id || subCategory._id}
               subCategory={subCategory}
-              categoryId={category.id}
+              categoryId={category.id || category._id}
               index={index}
             />
           ))}
+
+          {category.items && category.items.length > 0 && (
+            <div className="pt-2 space-y-4">
+              {category.items.map((item: any, index: number) => (
+                <MenuItemCard 
+                  key={item._id || item.id} 
+                  item={item} 
+                  index={index + category.subCategories.length} 
+                />
+              ))}
+            </div>
+          )}
         </div>
       </main>
     </div>
