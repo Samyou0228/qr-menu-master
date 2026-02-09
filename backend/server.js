@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 8080;
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || "*",
+  origin: [process.env.CORS_ORIGIN || "*", "http://localhost:5173", "http://localhost:4173"],
   credentials: true
 }));
 app.use(express.json());
