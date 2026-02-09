@@ -62,9 +62,37 @@ const AdminDashboard = () => {
 
   const filteredCategories = useMemo(() => {
     if (!searchQuery) return categories;
+    const lowerQuery = searchQuery.toLowerCase();
     return categories.filter((c: any) => 
-      c.name.toLowerCase().includes(searchQuery.toLowerCase())
+      c.name.toLowerCase().includes(lowerQuery) ||
+      c.items?.some((item: any) => item.name.toLowerCase().includes(lowerQuery)) ||
+      c.subCategories?.some((sub: any) => 
+        sub.name.toLowerCase().includes(lowerQuery) ||
+        sub.items?.some((item: any) => item.name.toLowerCase().includes(lowerQuery))
+      )
     );
+  }, [categories, searchQuery]);
+
+  const filteredItems = useMemo(() => {
+    if (!selectedCategory?.items) return [];
+    if (!searchQuery) return selectedCategory.items;
+    return selectedCategory.items.filter((item: any) => 
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [selectedCategory, searchQuery]);
+
+  const allMatchingItems = useMemo(() => {
+    if (!searchQuery) return [];
+    const lowerQuery = searchQuery.toLowerCase();
+    const allItems = categories.flatMap((cat: any) => {
+      // Direct items
+      const directItems = cat.items || [];
+      // Subcategory items
+      const subItems = cat.subCategories?.flatMap((sub: any) => sub.items || []) || [];
+      return [...directItems, ...subItems];
+    });
+    
+    return allItems.filter((item: any) => item.name.toLowerCase().includes(lowerQuery));
   }, [categories, searchQuery]);
 
   // Mutations
@@ -159,6 +187,7 @@ const AdminDashboard = () => {
     mutationFn: (payload: { id: string; categoryId: string }) => api.deleteItem(payload.id),
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["category", vars.categoryId] });
+      qc.invalidateQueries({ queryKey: ["categories"] });
       toast.success("Item deleted");
     },
     onError: (err) => toast.error(err.message),
@@ -189,7 +218,8 @@ const AdminDashboard = () => {
 
   const handleItemSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!selectedCategoryId) return;
+    const targetCategoryId = selectedCategoryId || editingItem?.categoryId;
+    if (!targetCategoryId) return;
     const formData = new FormData(e.currentTarget);
     
     // Fix boolean fields for Item
@@ -200,9 +230,9 @@ const AdminDashboard = () => {
     formData.set('isPopular', String(isPopularChecked));
 
     if (editingItem) {
-      updateItem.mutate({ id: editingItem.id || editingItem._id, categoryId: selectedCategoryId, formData });
+      updateItem.mutate({ id: editingItem.id || editingItem._id, categoryId: targetCategoryId, formData });
     } else {
-      createItem.mutate({ categoryId: selectedCategoryId, subCategoryId: selectedSubId || undefined, formData });
+      createItem.mutate({ categoryId: targetCategoryId, subCategoryId: selectedSubId || undefined, formData });
     }
   };
 
@@ -249,10 +279,6 @@ const AdminDashboard = () => {
             <LayoutGrid className="w-4 h-4" />
             Menu Management
           </Button>
-          <Button variant="ghost" className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground hover:bg-white/50 transition-colors">
-            <Settings className="w-4 h-4" />
-            Settings
-          </Button>
         </nav>
 
         <div className="p-4 border-t border-white/20">
@@ -277,15 +303,21 @@ const AdminDashboard = () => {
               <div className="relative w-full md:w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input 
-                  placeholder="Search categories..." 
+                  placeholder="Search items..." 
                   className="pl-9 bg-white/80 backdrop-blur-sm border-white/40 focus:bg-white transition-all"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <Button onClick={() => openCategoryDialog()} className="gradient-warm shadow-md hover:shadow-lg transition-all text-white font-medium">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Category
+              {!selectedCategoryId && (
+                <Button onClick={() => openCategoryDialog()} className="gradient-warm shadow-md hover:shadow-lg transition-all text-white font-medium">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Category
+                </Button>
+              )}
+              <Button variant="outline" onClick={() => selectedCategoryId ? setSelectedCategoryId(null) : navigate("/")}>
+                 <ChevronRight className="w-4 h-4 rotate-180 mr-1" />
+                 Back
               </Button>
             </div>
           </div>
@@ -313,6 +345,46 @@ const AdminDashboard = () => {
 
           <AnimatePresence mode="wait">
             {!selectedCategoryId ? (
+              searchQuery ? (
+                  <motion.div
+                   key="items-search-grid"
+                   initial={{ opacity: 0, y: 20 }}
+                   animate={{ opacity: 1, y: 0 }}
+                   exit={{ opacity: 0, y: -20 }}
+                   className="space-y-4"
+                 >
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <UtensilsCrossed className="w-4 h-4 text-primary" />
+                        Search Results ({allMatchingItems.length})
+                    </h3>
+                    <div className="bg-card rounded-xl border border-border/50 shadow-sm overflow-hidden">
+                        <div className="divide-y divide-border/50">
+                          {allMatchingItems.map((item: any) => (
+                            <div key={item.id || item._id} className="p-4 flex items-center justify-between hover:bg-muted/30 transition-colors">
+                              <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted">
+                                  <img src={item.imageUrl || item.image_url || item.image} className="w-full h-full object-cover" />
+                                </div>
+                                <div>
+                                  <h4 className="font-medium">{item.name}</h4>
+                                  <p className="text-sm text-muted-foreground">₹{item.amount || item.price}</p>
+                                </div>
+                              </div>
+                              <div className="flex gap-2">
+                                <Button size="sm" variant="outline" onClick={() => openItemDialog(item)}>Edit</Button>
+                                <Button size="sm" variant="destructive" onClick={() => deleteItem.mutate({ id: item.id || item._id, categoryId: item.categoryId })}>Delete</Button>
+                              </div>
+                            </div>
+                          ))}
+                          {allMatchingItems.length === 0 && (
+                            <div className="p-8 text-center text-muted-foreground">
+                              No items found matching "{searchQuery}"
+                            </div>
+                          )}
+                        </div>
+                    </div>
+                 </motion.div>
+              ) : (
               // Categories Grid
               <motion.div 
                 key="categories-grid"
@@ -363,6 +435,7 @@ const AdminDashboard = () => {
                   </div>
                 )}
               </motion.div>
+              )
             ) : !selectedSubId ? (
               // Subcategories & Items List
               <motion.div
@@ -424,7 +497,7 @@ const AdminDashboard = () => {
                     </div>
                   )} */}
 
-                  {selectedCategory?.items?.length > 0 && (
+                  {filteredItems?.length > 0 && (
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold flex items-center gap-2">
                         <UtensilsCrossed className="w-4 h-4 text-primary" />
@@ -432,7 +505,7 @@ const AdminDashboard = () => {
                       </h3>
                       <div className="bg-card rounded-xl border border-border/50 shadow-sm overflow-hidden">
                         <div className="divide-y divide-border/50">
-                          {selectedCategory.items.map((item: any) => (
+                          {filteredItems.map((item: any) => (
                             <div key={item.id || item._id} className="p-4 flex items-center justify-between hover:bg-muted/30 transition-colors">
                               <div className="flex items-center gap-4">
                                 <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted">
@@ -453,6 +526,11 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                   )}
+                  {filteredItems?.length === 0 && searchQuery && (
+                     <div className="text-center py-20 text-muted-foreground">
+                       <p>No items found matching "{searchQuery}"</p>
+                     </div>
+                  )}
                 </div>
               </motion.div>
             ) : (
@@ -469,10 +547,16 @@ const AdminDashboard = () => {
                     <h2 className="text-2xl font-bold">{selectedSub?.name}</h2>
                     <p className="text-muted-foreground">{selectedSub?.description}</p>
                   </div>
-                  <Button onClick={() => openItemDialog()}>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Item
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button variant="outline" onClick={() => setSelectedSubId(null)}>
+                      <ChevronRight className="w-4 h-4 rotate-180 mr-1" />
+                      Back
+                    </Button>
+                    <Button onClick={() => openItemDialog()}>
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Item
+                    </Button>
+                  </div>
                 </div>
 
                 <div className="bg-card rounded-xl border border-border/50 shadow-sm overflow-hidden">

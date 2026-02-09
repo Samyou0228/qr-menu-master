@@ -47,7 +47,7 @@ const AdminLogin = () => {
       >
         <Link 
           to="/" 
-          className="absolute top-6 left-6 p-3 rounded-full bg-white/80 backdrop-blur-sm shadow-soft hover:shadow-elevated transition-all duration-300 group"
+          className="absolute -top-16 left-0 p-3 rounded-full bg-white/80 backdrop-blur-sm shadow-soft hover:shadow-elevated transition-all duration-300 group z-50"
         >
           <ArrowLeft className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
         </Link>

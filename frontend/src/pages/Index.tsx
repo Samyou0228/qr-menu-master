@@ -41,7 +41,7 @@ const Index = () => {
           
           <h1 className="font-display text-5xl font-bold mb-4 tracking-tight drop-shadow-sm">
             <span className="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-primary to-warm-amber">
-              {restaurantInfo.name}
+              Vijaya Durga Hotel
             </span>
           </h1>
           
