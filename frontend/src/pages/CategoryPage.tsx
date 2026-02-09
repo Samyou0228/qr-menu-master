@@ -101,26 +101,29 @@ const CategoryPage = () => {
           animate="show"
           className="space-y-4"
         >
-          {category.subCategories.map((subCategory: any, index: number) => (
-            <SubCategoryCard
-              key={subCategory.id || subCategory._id}
-              subCategory={subCategory}
-              categoryId={category.id || category._id}
-              index={index}
-            />
-          ))}
-
-          {category.items && category.items.length > 0 && (
-            <div className="pt-2 space-y-4">
-              {category.items.map((item: any, index: number) => (
-                <MenuItemCard 
-                  key={item._id || item.id} 
-                  item={item} 
-                  index={index + category.subCategories.length} 
-                />
-              ))}
-            </div>
-          )}
+          {/* Flatten items from subcategories and direct items */}
+          {(() => {
+            const allItems = [
+              ...(category.items || []),
+              ...(category.subCategories || []).flatMap((sub: any) => sub.items || [])
+            ];
+            
+            return allItems.length > 0 ? (
+              <div className="pt-2 space-y-4">
+                {allItems.map((item: any, index: number) => (
+                  <MenuItemCard 
+                    key={item._id || item.id} 
+                    item={item} 
+                    index={index} 
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-10 text-muted-foreground">
+                No items available in this category.
+              </div>
+            );
+          })()}
         </motion.div>
       </main>
       </div>

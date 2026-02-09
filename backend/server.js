@@ -13,6 +13,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
 app.use(cors({
@@ -147,7 +148,10 @@ app.post("/admin/categories", authenticateToken, upload.single('image'), async (
     const cat = new Category(data);
     await cat.save();
     res.json(cat);
-  } catch (e) { res.status(500).send(e.message); }
+  } catch (e) { 
+    console.error("Error creating category:", e);
+    res.status(500).send(e.message); 
+  }
 });
 
 app.put("/admin/categories/:id", authenticateToken, upload.single('image'), async (req, res) => {
@@ -158,7 +162,10 @@ app.put("/admin/categories/:id", authenticateToken, upload.single('image'), asyn
     }
     const cat = await Category.findByIdAndUpdate(req.params.id, data, { new: true });
     res.json(cat);
-  } catch (e) { res.status(500).send(e.message); }
+  } catch (e) { 
+    console.error("Error updating category:", e);
+    res.status(500).send(e.message); 
+  }
 });
 
 app.delete("/admin/categories/:id", authenticateToken, async (req, res) => {
@@ -256,6 +263,11 @@ app.delete("/admin/items/:id", authenticateToken, async (req, res) => {
   } catch (e) { res.status(500).send(e.message); }
 });
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error("Global error handler:", err);
+  res.status(500).json({ error: err.message, stack: err.stack });
+});
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);

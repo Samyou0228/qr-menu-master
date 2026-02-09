@@ -168,6 +168,11 @@ const AdminDashboard = () => {
   const handleCategorySubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    
+    // Fix boolean fields for Category
+    const isVegChecked = (e.currentTarget.elements.namedItem('isVeg') as HTMLInputElement)?.checked;
+    formData.set('isVeg', String(isVegChecked));
+
     if (editingCategory) {
       updateCategory.mutate({ id: editingCategory.id || editingCategory._id, formData });
     } else {
@@ -190,6 +195,16 @@ const AdminDashboard = () => {
     e.preventDefault();
     if (!selectedCategoryId) return;
     const formData = new FormData(e.currentTarget);
+    
+    // Fix boolean fields for Item
+    const isVegChecked = (e.currentTarget.elements.namedItem('isVeg') as HTMLInputElement)?.checked;
+    const isSpicyChecked = (e.currentTarget.elements.namedItem('isSpicy') as HTMLInputElement)?.checked;
+    const isPopularChecked = (e.currentTarget.elements.namedItem('isPopular') as HTMLInputElement)?.checked;
+
+    formData.set('isVeg', String(isVegChecked));
+    formData.set('isSpicy', String(isSpicyChecked));
+    formData.set('isPopular', String(isPopularChecked));
+
     if (editingItem) {
       updateItem.mutate({ id: editingItem.id || editingItem._id, categoryId: selectedCategoryId, formData });
     } else {
@@ -369,10 +384,10 @@ const AdminDashboard = () => {
                     <p className="text-muted-foreground">{selectedCategory?.description}</p>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => openSubDialog()}>
+                    {/* <Button variant="outline" onClick={() => openSubDialog()}>
                       <Plus className="w-4 h-4 mr-2" />
                       Add Subcategory
-                    </Button>
+                    </Button> */}
                     <Button onClick={() => openItemDialog()}>
                       <Plus className="w-4 h-4 mr-2" />
                       Add Item
@@ -381,7 +396,7 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="grid gap-6">
-                  {selectedCategory?.subCategories?.length > 0 && (
+                  {/* {selectedCategory?.subCategories?.length > 0 && (
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold flex items-center gap-2">
                         <List className="w-4 h-4 text-primary" />
@@ -413,13 +428,13 @@ const AdminDashboard = () => {
                         ))}
                       </div>
                     </div>
-                  )}
+                  )} */}
 
                   {selectedCategory?.items?.length > 0 && (
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold flex items-center gap-2">
                         <UtensilsCrossed className="w-4 h-4 text-primary" />
-                        Direct Items
+                        Items
                       </h3>
                       <div className="bg-card rounded-xl border border-border/50 shadow-sm overflow-hidden">
                         <div className="divide-y divide-border/50">
