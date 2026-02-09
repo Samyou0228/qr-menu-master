@@ -34,60 +34,73 @@ const SubCategoryPage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header title={subCategory.name} showBack backTo={`/menu/${categoryId}`} />
-
-      {/* Hero Banner */}
-      <div className="relative h-40 overflow-hidden">
-        <img
-          src={subCategory.imageUrl || subCategory.image_url || subCategory.image}
-          alt={subCategory.name}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-        <div className="absolute bottom-4 left-4 right-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <div className="category-badge mb-2">{category.name}</div>
-            <h1 className="font-display text-2xl font-bold text-foreground">
-              {subCategory.name}
-            </h1>
-            <p className="text-muted-foreground text-sm mt-1">
-              {subCategory.description}
-            </p>
-          </motion.div>
-        </div>
+    <div className="min-h-screen relative bg-background pb-20 overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div 
+        className="fixed inset-0 z-0"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-background/95 backdrop-blur-[1px]" />
       </div>
 
-      <main className="container max-w-lg mx-auto px-4 py-6">
-        <motion.div
+      <div className="relative z-10">
+        <Header title={subCategory.name} showBack backTo={`/menu/${categoryId}`} />
+
+        {/* Hero Banner */}
+        <div className="relative h-40 overflow-hidden">
+          <img
+            src={subCategory.imageUrl || subCategory.image_url || subCategory.image}
+            alt={subCategory.name}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/60 to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <div className="inline-block px-3 py-1 mb-3 text-xs font-bold tracking-wider text-white uppercase bg-primary/80 backdrop-blur-md rounded-full border border-white/20 shadow-sm">{category.name}</div>
+              <h1 className="font-display text-3xl font-bold text-foreground drop-shadow-sm">
+                {subCategory.name}
+              </h1>
+              <p className="text-muted-foreground text-base mt-2 max-w-lg leading-relaxed">
+                {subCategory.description}
+              </p>
+            </motion.div>
+          </div>
+        </div>
+
+        <main className="container max-w-lg mx-auto px-4 py-8">
+          <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex items-center justify-between mb-4"
+          className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8"
         >
-          <span className="text-sm text-muted-foreground">
-            {filteredItems.length} items
+          <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+            {filteredItems.length} items available
           </span>
-          <div className="flex items-center gap-3 text-xs">
+          <div className="flex p-1 bg-muted/50 backdrop-blur-sm rounded-full border border-white/10">
+             <button
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${filter === "all" ? "bg-white text-primary shadow-sm" : "text-muted-foreground hover:text-primary"}`}
+              onClick={() => setFilter("all")}
+            >
+              All
+            </button>
             <button
-              className={`px-2 py-0.5 rounded-full ${filter === "veg" ? "bg-success text-success-foreground" : "bg-muted"}`}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${filter === "veg" ? "bg-green-600 text-white shadow-sm" : "text-muted-foreground hover:text-green-600"}`}
               onClick={() => setFilter("veg")}
             >
               Veg
             </button>
             <button
-              className={`px-2 py-0.5 rounded-full ${filter === "nonveg" ? "bg-destructive text-destructive-foreground" : "bg-muted"}`}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${filter === "nonveg" ? "bg-red-600 text-white shadow-sm" : "text-muted-foreground hover:text-red-600"}`}
               onClick={() => setFilter("nonveg")}
             >
               Non-Veg
-            </button>
-            <button
-              className={`px-2 py-0.5 rounded-full ${filter === "all" ? "bg-primary text-primary-foreground" : "bg-muted"}`}
-              onClick={() => setFilter("all")}
-            >
-              All
             </button>
           </div>
         </motion.div>
@@ -98,6 +111,7 @@ const SubCategoryPage = () => {
           ))}
         </div>
       </main>
+      </div>
     </div>
   );
 };

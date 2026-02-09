@@ -53,16 +53,22 @@ export const api = {
   // getSubCategory removed/deprecated in favor of tree view or derived state
   createItem: (
     categoryId: string,
-    subCategoryId: string,
+    subCategoryId: string | null | undefined,
     payload: FormData | { name: string; description?: string; amount: number; imageUrl?: string; isVeg?: boolean; isPopular?: boolean },
   ) => {
     if (payload instanceof FormData) {
       payload.append('categoryId', categoryId);
-      payload.append('subCategoryId', subCategoryId);
+      if (subCategoryId) payload.append('subCategoryId', subCategoryId);
     }
+    
+    const jsonBody = payload instanceof FormData ? {} : { ...payload, categoryId };
+    if (!(payload instanceof FormData) && subCategoryId) {
+      (jsonBody as any).subCategoryId = subCategoryId;
+    }
+
     return request("/admin/items", { 
       method: "POST", 
-      body: payload instanceof FormData ? payload : JSON.stringify({ ...payload, categoryId, subCategoryId }) 
+      body: payload instanceof FormData ? payload : JSON.stringify(jsonBody) 
     });
   },
 
