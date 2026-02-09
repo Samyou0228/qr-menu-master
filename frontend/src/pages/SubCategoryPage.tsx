@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -13,6 +14,8 @@ const SubCategoryPage = () => {
     queryFn: () => api.getCategory(String(categoryId)),
     enabled: !!categoryId,
   });
+
+  const [filter, setFilter] = useState<"veg" | "nonveg" | "all">("all");
   
   const subCategory = category?.subCategories?.find((s: any) => s._id === subCategoryId);
 
@@ -24,7 +27,6 @@ const SubCategoryPage = () => {
     );
   }
 
-  const [filter, setFilter] = useState<"veg" | "nonveg" | "all">("all");
   const filteredItems = (subCategory.items ?? []).filter((item: any) => {
     if (filter === "all") return true;
     const isVeg = item.isVeg ?? true;

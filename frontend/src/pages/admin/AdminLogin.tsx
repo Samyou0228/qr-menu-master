@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ArrowLeft } from "lucide-react";
 
 const AdminLogin = () => {
   const [username, setUsername] = useState("admin");
@@ -23,7 +25,13 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="min-h-screen flex items-center justify-center bg-background relative">
+      <Link 
+        to="/" 
+        className="absolute top-4 left-4 p-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
+      >
+        <ArrowLeft className="w-5 h-5" />
+      </Link>
       <form onSubmit={onSubmit} className="w-full max-w-sm space-y-3 p-6 rounded-xl border bg-card">
         <h1 className="text-xl font-semibold">Admin Login</h1>
         {error && <div className="text-destructive text-sm">{error}</div>}

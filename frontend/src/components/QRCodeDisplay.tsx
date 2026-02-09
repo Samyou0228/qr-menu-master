@@ -53,14 +53,8 @@ const QRCodeDisplay = ({ menuUrl }: QRCodeDisplayProps) => {
             size={220}
             level="H"
             includeMargin={true}
-            bgColor="transparent"
-            fgColor="hsl(30, 15%, 15%)"
-            imageSettings={{
-              src: "",
-              height: 0,
-              width: 0,
-              excavate: false,
-            }}
+            bgColor="#ffffff"
+            fgColor="#000000"
           />
         </div>
       </div>

@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link, useNavigate } from "react-router-dom";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Pencil, Trash, Loader2 } from "lucide-react";
+import { Pencil, Trash, Loader2, Home } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -140,9 +142,16 @@ const AdminDashboard = () => {
       <div className="container max-w-4xl mx-auto px-4 py-6 space-y-8">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold">Admin Dashboard</h1>
-          <Button variant="outline" onClick={() => { localStorage.removeItem("token"); location.href = "/admin/login"; }}>
-            Logout
-          </Button>
+          <div className="flex items-center gap-2">
+            <Link to="/">
+              <Button variant="outline" size="icon" title="Go to Menu">
+                <Home className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Button variant="outline" onClick={() => { localStorage.removeItem("token"); location.href = "/admin/login"; }}>
+              Logout
+            </Button>
+          </div>
         </div>
 
         {/* Categories Section */}

@@ -8,10 +8,7 @@ const Index = () => {
   // This would be your actual deployed menu URL
   // NOTE: For local development testing on mobile, use your computer's local IP address
   // instead of window.location.origin (which would be 'localhost' on the phone).
-  const isDev = import.meta.env.DEV;
-  const menuUrl = isDev 
-    ? "http://192.168.1.5:5173/menu" // Your local IP
-    : window.location.origin + "/menu";
+  const menuUrl = (import.meta.env.VITE_BASE_URL || window.location.origin) + "/menu";
 
   return (
     <div className="min-h-screen gradient-hero">
