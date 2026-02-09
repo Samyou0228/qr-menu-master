@@ -605,11 +605,11 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Price (₹)</label>
-                <Input name="price" type="number" defaultValue={editingItem?.price} required />
+                <Input name="amount" type="number" defaultValue={editingItem?.amount} required />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Image</label>
-                <Input type="file" name="image" accept="image/*" required={!editingItem} />
+                <Input type="file" name="image" accept="image/*" />
               </div>
             </div>
             <div className="flex flex-col gap-2">
