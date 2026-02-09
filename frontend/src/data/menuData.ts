@@ -366,7 +366,7 @@ export const menuData: Category[] = [
 ];
 
 export const restaurantInfo = {
-  name: "Spice Garden",
+  name: "Vijaya Durga Hotel",
   tagline: "Authentic South Indian Cuisine",
   description: "Experience the rich flavors of South India with our traditional recipes passed down through generations.",
   address: "123 Food Street, Cuisine City",
