@@ -50,21 +50,4 @@ if (hasCloudinary) {
   upload = multer({ storage: storage });
 }
 
-// Temporary: Forcing local storage to bypass 500 error until credentials are fixed
-// Comment this block out to use Cloudinary
-const localStorage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      const dir = 'uploads/';
-      if (!fs.existsSync(dir)){
-          fs.mkdirSync(dir);
-      }
-      cb(null, dir);
-    },
-    filename: function (req, file, cb) {
-      cb(null, Date.now() + path.extname(file.originalname));
-    }
-});
-upload = multer({ storage: localStorage });
-
-
 export default upload;

@@ -169,10 +169,6 @@ const AdminDashboard = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     
-    // Fix boolean fields for Category
-    const isVegChecked = (e.currentTarget.elements.namedItem('isVeg') as HTMLInputElement)?.checked;
-    formData.set('isVeg', String(isVegChecked));
-
     if (editingCategory) {
       updateCategory.mutate({ id: editingCategory.id || editingCategory._id, formData });
     } else {
@@ -197,11 +193,9 @@ const AdminDashboard = () => {
     const formData = new FormData(e.currentTarget);
     
     // Fix boolean fields for Item
-    const isVegChecked = (e.currentTarget.elements.namedItem('isVeg') as HTMLInputElement)?.checked;
     const isSpicyChecked = (e.currentTarget.elements.namedItem('isSpicy') as HTMLInputElement)?.checked;
     const isPopularChecked = (e.currentTarget.elements.namedItem('isPopular') as HTMLInputElement)?.checked;
 
-    formData.set('isVeg', String(isVegChecked));
     formData.set('isSpicy', String(isSpicyChecked));
     formData.set('isPopular', String(isPopularChecked));
 
@@ -536,9 +530,18 @@ const AdminDashboard = () => {
               <label className="text-sm font-medium">Image</label>
               <Input type="file" name="image" accept="image/*" required={!editingCategory} />
             </div>
-            <div className="flex items-center gap-2">
-              <input type="checkbox" name="isVeg" defaultChecked={editingCategory?.isVeg ?? true} id="isVeg" />
-              <label htmlFor="isVeg" className="text-sm">Vegetarian Category?</label>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Type</label>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <input type="radio" name="isVeg" value="true" defaultChecked={editingCategory?.isVeg !== false} id="catVeg" />
+                  <label htmlFor="catVeg" className="text-sm">Vegetarian</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="radio" name="isVeg" value="false" defaultChecked={editingCategory?.isVeg === false} id="catNonVeg" />
+                  <label htmlFor="catNonVeg" className="text-sm">Non-Vegetarian</label>
+                </div>
+              </div>
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setIsCategoryDialogOpen(false)}>Cancel</Button>
@@ -586,6 +589,9 @@ const AdminDashboard = () => {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>{editingItem ? "Edit Item" : "New Item"}</DialogTitle>
+            <DialogDescription>
+              {editingItem ? "Update item details below." : "Create a new item for your menu."}
+            </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleItemSubmit} className="space-y-4">
             <div className="space-y-2">
@@ -607,9 +613,18 @@ const AdminDashboard = () => {
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <input type="checkbox" name="isVeg" defaultChecked={editingItem?.isVeg ?? true} id="itemVeg" />
-                <label htmlFor="itemVeg" className="text-sm">Vegetarian</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Dietary Preference</label>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <input type="radio" name="isVeg" value="true" defaultChecked={editingItem?.isVeg !== false} id="itemVeg" />
+                    <label htmlFor="itemVeg" className="text-sm">Vegetarian</label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input type="radio" name="isVeg" value="false" defaultChecked={editingItem?.isVeg === false} id="itemNonVeg" />
+                    <label htmlFor="itemNonVeg" className="text-sm">Non-Vegetarian</label>
+                  </div>
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <input type="checkbox" name="isSpicy" defaultChecked={editingItem?.isSpicy ?? false} id="itemSpicy" />
