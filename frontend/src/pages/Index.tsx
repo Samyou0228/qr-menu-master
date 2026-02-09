@@ -68,14 +68,6 @@ const Index = () => {
           transition={{ delay: 0.5 }}
           className="text-center"
         >
-          <Link
-            to="/menu"
-            className="inline-flex items-center gap-2 px-8 py-4 gradient-warm text-primary-foreground rounded-2xl text-lg font-semibold shadow-elevated hover:opacity-90 transition-opacity"
-          >
-            <UtensilsCrossed className="w-5 h-5" />
-            Browse Menu
-          </Link>
-          
           <div className="mt-8">
             <Link 
               to="/admin/login"

@@ -1,6 +1,6 @@
 import { QRCodeSVG } from "qrcode.react";
 import { motion } from "framer-motion";
-import { Download, Share2, Smartphone } from "lucide-react";
+import { Download, Smartphone } from "lucide-react";
 import { restaurantInfo } from "@/data/menuData";
 
 interface QRCodeDisplayProps {
@@ -19,23 +19,6 @@ const QRCodeDisplay = ({ menuUrl }: QRCodeDisplayProps) => {
       link.download = `${restaurantInfo.name.toLowerCase().replace(/\s+/g, "-")}-menu-qr.svg`;
       link.click();
       URL.revokeObjectURL(url);
-    }
-  };
-
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `${restaurantInfo.name} Menu`,
-          text: `Scan to view our digital menu!`,
-          url: menuUrl,
-        });
-      } catch (err) {
-        console.log("Share cancelled");
-      }
-    } else {
-      navigator.clipboard.writeText(menuUrl);
-      alert("Menu link copied to clipboard!");
     }
   };
 
@@ -77,13 +60,6 @@ const QRCodeDisplay = ({ menuUrl }: QRCodeDisplayProps) => {
           >
             <Download className="w-4 h-4" />
             Download QR
-          </button>
-          <button
-            onClick={handleShare}
-            className="flex items-center gap-2 px-4 py-2 gradient-warm text-primary-foreground rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
-          >
-            <Share2 className="w-4 h-4" />
-            Share Menu
           </button>
         </div>
       </motion.div>
