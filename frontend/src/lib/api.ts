@@ -57,13 +57,26 @@ export const api = {
     payload: FormData | { name: string; description?: string; amount: number; imageUrl?: string; isVeg?: boolean; isPopular?: boolean },
   ) => {
     if (payload instanceof FormData) {
-      payload.append('categoryId', categoryId);
-      if (subCategoryId) payload.append('subCategoryId', subCategoryId);
+      payload.append("categoryId", categoryId);
+      if (subCategoryId) payload.append("subCategoryId", subCategoryId);
     }
     
-    const jsonBody = payload instanceof FormData ? {} : { ...payload, categoryId };
+    type JsonItemPayload = {
+      name: string;
+      description?: string;
+      amount: number;
+      imageUrl?: string;
+      isVeg?: boolean;
+      isPopular?: boolean;
+      categoryId: string;
+      subCategoryId?: string | null;
+    };
+
+    const jsonBody: Partial<JsonItemPayload> =
+      payload instanceof FormData ? {} : { ...payload, categoryId };
+
     if (!(payload instanceof FormData) && subCategoryId) {
-      (jsonBody as any).subCategoryId = subCategoryId;
+      jsonBody.subCategoryId = subCategoryId;
     }
 
     return request("/admin/items", { 

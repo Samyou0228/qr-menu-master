@@ -20,8 +20,9 @@ const AdminLogin = () => {
       const { token } = await api.login(username, password);
       localStorage.setItem("token", token);
       navigate("/admin");
-    } catch (err: any) {
-      setError(err.message || "Login failed");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Login failed";
+      setError(message);
     }
   };
 
