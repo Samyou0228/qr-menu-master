@@ -6,9 +6,16 @@ import { UtensilsCrossed, MapPin, Phone } from "lucide-react";
 
 const Index = () => {
   // This would be your actual deployed menu URL
-  // NOTE: For local development testing on mobile, use your computer's local IP address
-  // instead of window.location.origin (which would be 'localhost' on the phone).
-  const menuUrl = (import.meta.env.VITE_BASE_URL || window.location.origin) + "/menu";
+  // We dynamically use the local network IP for mobile testing so the QR code always works
+  const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+  //@ts-ignore
+  const localIp = typeof process !== 'undefined' && process.env.LOCAL_IP ? process.env.LOCAL_IP : null;
+  
+  const baseUrl = isLocalhost && localIp && localIp !== "localhost"
+    ? `http://${localIp}:${window.location.port || '5173'}`
+    : window.location.origin;
+    
+  const menuUrl = baseUrl + "/menu";
 
   return (
     <div className="min-h-screen relative flex flex-col justify-center overflow-hidden">
